@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RAG Engine — Gemma4 + Live Web Search</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:       #0a0a0f;
+    --surface:  #11111c;
+    --card:     #16162a;
+    --border:   #252545;
+    --accent:   #6c63ff;
+    --accent2:  #00d4aa;
+    --text:     #e8e8f0;
+    --muted:    #6b6b90;
+    --danger:   #ff4d6d;
+    --warn:     #ffd166;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  .orb1 { width:500px; height:500px; background:var(--accent);  top:-150px; left:-150px; }
+  .orb2 { width:400px; height:400px; background:var(--accent2); bottom:-100px; right:-100px; animation-delay:-6s; }
+
+  @keyframes drift { to { transform: translate(30px, 20px); } }
+
+  /* Header */
+  header {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 900px;
+    padding: 40px 20px 20px;
+    text-align: center;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .tagline {
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    margin-top: 6px;
+  }
+  .model-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    margin-top: 14px;
+  }
+  .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Main layout */
+  main {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 20px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Search bar */
+  .search-box {
+    display: flex;
+    gap: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 10px;
+    transition: border-color .2s;
+  }
+  .search-box:focus-within { border-color: var(--accent); }
+
+  #queryInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    color: var(--text);
+    padding: 8px 12px;
+  }
+  #queryInput::placeholder { color: var(--muted); }
+
+  #searchBtn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity .2s, transform .1s;
+    white-space: nowrap;
+  }
+  #searchBtn:hover { opacity: 0.9; }
+  #searchBtn:active { transform: scale(0.97); }
+  #searchBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Options row */
+  .options {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .option-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color .2s, color .2s;
+    user-select: none;
+  }
+  .option-chip input { accent-color: var(--accent); }
+  .option-chip:hover { border-color: var(--accent); color: var(--text); }
+
+  label[for="numResults"], label[for="topK"] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  label[for="numResults"] select,
+  label[for="topK"] select {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+  }
+
+  /* Status pipeline */
+  #statusArea {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+  }
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--muted);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity .3s, transform .3s;
+  }
+  .status-item.active { opacity:1; transform:translateX(0); color: var(--accent2); }
+  .status-item.done   { opacity:0.5; color: var(--muted); }
+
+  /* Sources */
+  #sourcesArea {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sources-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 8px;
+  }
+  .source-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    transition: border-color .2s;
+    opacity: 0;
+    animation: fadeUp .4s forwards;
+  }
+  .source-card:hover { border-color: var(--accent); }
+  .source-title { color: var(--text); font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .source-url   { color: var(--accent2); font-family: 'Space Mono', monospace; font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .source-snip  { color: var(--muted); margin-top: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* Answer area */
+  #answerArea {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    line-height: 1.75;
+    position: relative;
+    overflow: hidden;
+  }
+  #answerArea::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+    border-radius: 3px;
+  }
+  #answerContent {
+    font-size: 0.98rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  /* Markdown-ish styling */
+  #answerContent strong { color: var(--accent2); }
+  #answerContent em { color: var(--warn); }
+
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--accent);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 0.8s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* Error */
+  #errorArea {
+    display: none;
+    background: rgba(255,77,109,0.1);
+    border: 1px solid var(--danger);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--danger);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+  }
+
+  /* Copy button */
+  #copyBtn {
+    display: none;
+    align-self: flex-end;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: border-color .2s, color .2s;
+  }
+  #copyBtn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* Suggestions */
+  .suggestions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .suggestion {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .suggestion:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  /* Markdown renderer */
+  .md-h1, .md-h2, .md-h3 { color: var(--accent2); font-weight: 700; margin: 12px 0 6px; }
+  .md-h1 { font-size: 1.3em; }
+  .md-h2 { font-size: 1.15em; }
+  .md-h3 { font-size: 1.05em; }
+  .md-bold { color: var(--text); font-weight: 700; }
+  .md-code { background: rgba(108,99,255,0.15); padding: 1px 6px; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 0.88em; color: var(--accent); }
+  .md-li { margin-left: 20px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🔮</div>
+    <h1>RAG Engine</h1>
+  </div>
+  <p class="tagline">REAL-TIME WEB SEARCH · SEMANTIC RETRIEVAL · LOCAL LLM</p>
+  <div class="model-badge">
+    <div class="dot"></div>
+    gemma4:latest · nomic-embed-text · DuckDuckGo
+  </div>
+</header>
+
+<main>
+
+  <!-- Suggestions -->
+  <div class="suggestions">
+    <div class="suggestion" onclick="setQuery(this)">Latest AI news 2025</div>
+    <div class="suggestion" onclick="setQuery(this)">How does quantum computing work?</div>
+    <div class="suggestion" onclick="setQuery(this)">Best programming languages 2025</div>
+    <div class="suggestion" onclick="setQuery(this)">Bangladesh economy recent updates</div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="search-box">
+    <input id="queryInput" type="text" placeholder="Ask anything — I'll search the web in real-time…"
+           onkeydown="if(event.key==='Enter') search()"/>
+    <button id="searchBtn" onclick="search()">⚡ Search & Generate</button>
+  </div>
+
+  <!-- Options -->
+  <div class="options">
+    <label class="option-chip">
+      <input type="checkbox" id="fetchPages" checked/>
+      Fetch full pages
+    </label>
+    <label for="numResults">
+      Sources:
+      <select id="numResults">
+        <option value="4">4</option>
+        <option value="6" selected>6</option>
+        <option value="8">8</option>
+      </select>
+    </label>
+    <label for="topK">
+      Top-K chunks:
+      <select id="topK">
+        <option value="3">3</option>
+        <option value="5" selected>5</option>
+        <option value="8">8</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Status pipeline -->
+  <div id="statusArea"></div>
+
+  <!-- Sources -->
+  <div id="sourcesArea">
+    <div class="sources-title">📡 Sources retrieved</div>
+    <div class="sources-grid" id="sourcesGrid"></div>
+  </div>
+
+  <!-- Answer -->
+  <div id="answerArea">
+    <div id="answerContent"></div>
+  </div>
+
+  <!-- Error -->
+  <div id="errorArea"></div>
+
+  <!-- Copy -->
+  <button id="copyBtn" onclick="copyAnswer()">📋 Copy answer</button>
+
+</main>
+
+<script>
+  let rawAnswer = "";
+
+  function setQuery(el) {
+    document.getElementById("queryInput").value = el.textContent;
+  }
+
+  function showEl(id, flex=true) {
+    document.getElementById(id).style.display = flex ? "flex" : "block";
+  }
+  function hideEl(id) {
+    document.getElementById(id).style.display = "none";
+  }
+
+  // Simple markdown renderer
+  function renderMarkdown(text) {
+    return text
+      .replace(/^### (.+)$/gm, '<div class="md-h3">$1</div>')
+      .replace(/^## (.+)$/gm,  '<div class="md-h2">$1</div>')
+      .replace(/^# (.+)$/gm,   '<div class="md-h1">$1</div>')
+      .replace(/\*\*(.+?)\*\*/g, '<span class="md-bold">$1</span>')
+      .replace(/`(.+?)`/g, '<span class="md-code">$1</span>')
+      .replace(/^[-*] (.+)$/gm, '<div class="md-li">• $1</div>')
+      .replace(/\n/g, '<br/>');
+  }
+
+  async function search() {
+    const query = document.getElementById("queryInput").value.trim();
+    if (!query) return;
+
+    const fetchPages = document.getElementById("fetchPages").checked;
+    const numResults = parseInt(document.getElementById("numResults").value);
+    const topK       = parseInt(document.getElementById("topK").value);
+
+    // Reset UI
+    rawAnswer = "";
+    hideEl("errorArea");
+    hideEl("copyBtn");
+    document.getElementById("answerContent").innerHTML = "";
+    document.getElementById("sourcesGrid").innerHTML   = "";
+
+    const statusArea = document.getElementById("statusArea");
+    statusArea.innerHTML = "";
+    showEl("statusArea", true);
+    showEl("answerArea", false);
+    showEl("sourcesArea", true);
+
+    document.getElementById("searchBtn").disabled = true;
+
+    const addStatus = (msg) => {
+      // Mark previous as done
+      statusArea.querySelectorAll(".status-item.active").forEach(el => {
+        el.classList.remove("active");
+        el.classList.add("done");
+      });
+      const div = document.createElement("div");
+      div.className = "status-item";
+      div.innerHTML = `<span>${msg}</span>`;
+      statusArea.appendChild(div);
+      requestAnimationFrame(() => div.classList.add("active"));
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/rag/stream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, num_results: numResults, top_k: topK, fetch_pages: fetchPages }),
+      });
+
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+      const reader   = response.body.getReader();
+      const decoder  = new TextDecoder();
+      let   buffer   = "";
+      let   answerEl = document.getElementById("answerContent");
+      let   answering = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          let event;
+          try { event = JSON.parse(line.slice(6)); } catch { continue; }
+
+          if (event.type === "status") {
+            addStatus(event.message);
+          }
+
+          else if (event.type === "sources") {
+            const grid = document.getElementById("sourcesGrid");
+            event.sources.forEach((s, i) => {
+              const card = document.createElement("div");
+              card.className = "source-card";
+              card.style.animationDelay = `${i * 0.06}s`;
+              card.innerHTML = `
+                <div class="source-title">${s.title || 'Source'}</div>
+                <div class="source-url">${s.url ? new URL(s.url.startsWith('http') ? s.url : 'https://'+s.url).hostname : ''}</div>
+                <div class="source-snip">${s.snippet}</div>
+              `;
+              if (s.url) card.onclick = () => window.open(s.url, "_blank");
+              card.style.cursor = s.url ? "pointer" : "default";
+              grid.appendChild(card);
+            });
+          }
+
+          else if (event.type === "answer_token") {
+            if (!answering) {
+              answering = true;
+              showEl("answerArea", false);
+              addStatus("📝 Writing answer...");
+            }
+            rawAnswer += event.token;
+            answerEl.innerHTML = renderMarkdown(rawAnswer) + '<span class="cursor"></span>';
+            answerEl.scrollIntoView({ behavior: "smooth", block: "end" });
+          }
+
+          else if (event.type === "done") {
+            // Remove cursor
+            answerEl.innerHTML = renderMarkdown(rawAnswer);
+            statusArea.querySelectorAll(".status-item.active").forEach(el => {
+              el.classList.remove("active");
+              el.classList.add("done");
+            });
+            const doneDiv = document.createElement("div");
+            doneDiv.className = "status-item active";
+            doneDiv.innerHTML = `<span>✅ Done!</span>`;
+            statusArea.appendChild(doneDiv);
+            showEl("copyBtn", false);
+          }
+
+          else if (event.type === "error") {
+            document.getElementById("errorArea").textContent = "❌ " + event.message;
+            showEl("errorArea", false);
+          }
+        }
+      }
+    } catch (err) {
+      document.getElementById("errorArea").textContent =
+        "❌ Cannot connect to RAG backend. Is it running on http://localhost:8000?  →  " + err.message;
+      showEl("errorArea", false);
+      hideEl("statusArea");
+    }
+
+    document.getElementById("searchBtn").disabled = false;
+  }
+
+  function copyAnswer() {
+    navigator.clipboard.writeText(rawAnswer).then(() => {
+      const btn = document.getElementById("copyBtn");
+      const orig = btn.textContent;
+      btn.textContent = "✅ Copied!";
+      setTimeout(() => { btn.textContent = orig; }, 1500);
+    });
+  }
+</script>
+</body>
+</html>

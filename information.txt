@@ -1,0 +1,119 @@
+=======================================================
+SCIENCE & TECHNOLOGY FACTS — RAG TEST KNOWLEDGE BASE
+=======================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1: SPACE & ASTRONOMY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The universe is approximately 13.8 billion years old, originating from an event known as the Big Bang. During the Big Bang, all matter, energy, space, and time erupted from an infinitely dense point called a singularity.
+
+The Milky Way galaxy is a barred spiral galaxy containing an estimated 100 to 400 billion stars. Our solar system is located about 26,000 light-years from the galactic center, in a region called the Orion Arm.
+
+The Sun is a G-type main-sequence star (also called a yellow dwarf) with a surface temperature of approximately 5,500 degrees Celsius. Its core temperature reaches about 15 million degrees Celsius, where nuclear fusion converts hydrogen into helium, releasing enormous energy.
+
+Light from the Sun takes approximately 8 minutes and 20 seconds to reach Earth. The Sun accounts for 99.86% of the total mass of the solar system.
+
+The eight planets of the solar system in order from the Sun are: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune. Pluto was reclassified as a dwarf planet by the International Astronomical Union (IAU) in 2006.
+
+Jupiter is the largest planet in the solar system, with a mass more than twice that of all other planets combined. Its Great Red Spot is a storm that has been observed for over 350 years and is larger than Earth.
+
+Saturn has the most extensive ring system of any planet, composed mainly of ice particles and rocky debris. Saturn's rings extend up to 282,000 kilometers from the planet but are remarkably thin, averaging only about 10 meters in thickness.
+
+A black hole is a region of spacetime where gravity is so strong that nothing — not even light — can escape once it crosses the event horizon. The boundary of a black hole is called the event horizon. Supermassive black holes exist at the centers of most large galaxies, including our own.
+
+The first image of a black hole was captured in 2019 by the Event Horizon Telescope (EHT) collaboration. The black hole imaged was M87*, located in the galaxy Messier 87, approximately 55 million light-years from Earth.
+
+The James Webb Space Telescope (JWST), launched on December 25, 2021, is the most powerful space telescope ever built. It observes the universe primarily in infrared light, allowing it to see through dust clouds and observe the earliest galaxies formed after the Big Bang.
+
+The International Space Station (ISS) orbits Earth at an altitude of approximately 400 kilometers and travels at a speed of about 28,000 kilometers per hour. It completes 15.5 orbits around Earth each day.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2: PHYSICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Newton's Three Laws of Motion form the foundation of classical mechanics. The First Law states that an object at rest stays at rest and an object in motion stays in motion unless acted upon by an external force. The Second Law states that force equals mass times acceleration (F = ma). The Third Law states that for every action there is an equal and opposite reaction.
+
+Einstein's Special Theory of Relativity, published in 1905, introduced two key postulates: the laws of physics are the same in all inertial frames of reference, and the speed of light in a vacuum is constant at approximately 299,792 kilometers per second, regardless of the motion of the observer or the source.
+
+Einstein's famous equation E = mc² expresses the equivalence of energy (E) and mass (m), where c is the speed of light. This means that a small amount of mass can be converted into an enormous amount of energy.
+
+Quantum mechanics is the branch of physics that describes the behavior of particles at atomic and subatomic scales. A key principle is Heisenberg's Uncertainty Principle, which states that you cannot simultaneously know both the exact position and exact momentum of a particle.
+
+The Standard Model of particle physics is the theory describing the fundamental particles and forces of nature. It includes quarks, leptons, and bosons. The Higgs boson, discovered at CERN's Large Hadron Collider in 2012, gives other particles their mass.
+
+Thermodynamics has four fundamental laws. The Zeroth Law defines thermal equilibrium. The First Law states energy cannot be created or destroyed, only transformed (conservation of energy). The Second Law states entropy of an isolated system always increases over time. The Third Law states absolute zero temperature (−273.15°C) cannot be reached.
+
+Superconductivity is a phenomenon where certain materials conduct electricity with zero electrical resistance when cooled below a critical temperature. This effect was first discovered in mercury at 4.2 Kelvin by Heike Kamerlingh Onnes in 1911.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3: BIOLOGY & GENETICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DNA (deoxyribonucleic acid) is the molecule that carries genetic information in all living organisms. It has a double helix structure, first described by James Watson and Francis Crick in 1953, building on X-ray crystallography work by Rosalind Franklin.
+
+The human genome contains approximately 3 billion base pairs of DNA and around 20,000–25,000 protein-coding genes. Despite this, only about 1.5% of the human genome codes for proteins; the rest was once called "junk DNA" but is now known to have regulatory and structural roles.
+
+CRISPR-Cas9 is a revolutionary gene-editing technology derived from a natural defense mechanism in bacteria. It allows scientists to precisely cut, delete, or insert DNA sequences in any organism. The tool was developed by Jennifer Doudna and Emmanuelle Charpentier, who received the Nobel Prize in Chemistry in 2020.
+
+Charles Darwin's Theory of Evolution by Natural Selection, published in "On the Origin of Species" in 1859, states that organisms with favorable heritable traits are more likely to survive and reproduce, passing those traits to offspring. Over time, this leads to new species.
+
+The cell is the basic unit of life. There are two types: prokaryotic cells (no nucleus, found in bacteria and archaea) and eukaryotic cells (with a nucleus, found in animals, plants, fungi, and protists). The human body contains approximately 37 trillion cells.
+
+Mitochondria are organelles found in eukaryotic cells that produce energy in the form of ATP (adenosine triphosphate) through a process called cellular respiration. They have their own DNA, supporting the endosymbiotic theory that mitochondria were once independent bacteria.
+
+Viruses are not considered living organisms because they cannot reproduce on their own — they require a host cell to replicate. A virus consists of genetic material (DNA or RNA) enclosed in a protein coat called a capsid.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4: COMPUTER SCIENCE & AI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The first general-purpose electronic computer, ENIAC (Electronic Numerical Integrator and Computer), was completed in 1945. It weighed about 30 tons, occupied 1,800 square feet, and could perform about 5,000 additions per second.
+
+Moore's Law, proposed by Gordon Moore in 1965, observed that the number of transistors on a microchip doubles approximately every two years, leading to exponential increases in computing power and decreases in cost. While still broadly followed, the physical limits of silicon are slowing this trend.
+
+Machine learning is a subset of artificial intelligence where systems learn from data to make predictions or decisions without being explicitly programmed. It includes supervised learning (labeled data), unsupervised learning (unlabeled data), and reinforcement learning (reward-based learning).
+
+Deep learning uses artificial neural networks with many layers (hence "deep") to model complex patterns in data. It has revolutionized fields such as image recognition, natural language processing, and speech recognition. The development of the transformer architecture in 2017 (introduced in the paper "Attention Is All You Need") was a major breakthrough.
+
+Large Language Models (LLMs) are a type of deep learning model trained on massive amounts of text data. They can generate human-like text, answer questions, write code, and translate languages. Examples include GPT-4, Claude, Gemini, and LLaMA.
+
+Retrieval-Augmented Generation (RAG) is a technique that combines information retrieval with language model generation. Instead of relying solely on the model's training data, RAG fetches relevant documents from an external knowledge base and uses them as context when generating responses. This reduces hallucination and keeps answers grounded in facts.
+
+The concept of the internet originated from ARPANET, a US Department of Defense project in the late 1960s. The World Wide Web was invented by Tim Berners-Lee in 1989 as a system for sharing information using hyperlinks and the HTTP protocol.
+
+Quantum computing uses quantum bits (qubits) which can exist in superposition — representing both 0 and 1 simultaneously — unlike classical bits which are either 0 or 1. This allows quantum computers to solve certain problems exponentially faster than classical computers. IBM, Google, and several startups are leading development in this field.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5: CHEMISTRY & MATERIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The periodic table organizes all known chemical elements by atomic number, electron configuration, and recurring chemical properties. It was developed by Dmitri Mendeleev in 1869. As of 2024, there are 118 confirmed elements.
+
+An atom consists of a nucleus (containing protons and neutrons) surrounded by electrons in orbital shells. The number of protons defines the element. Atoms with the same number of protons but different numbers of neutrons are called isotopes.
+
+Graphene is a single layer of carbon atoms arranged in a two-dimensional hexagonal lattice. It is the thinnest, strongest material ever discovered — about 200 times stronger than steel — and an excellent conductor of heat and electricity. It was first isolated in 2004 by Andre Geim and Konstantin Novoselov, who won the Nobel Prize in Physics in 2010.
+
+Lithium-ion batteries power most modern portable electronics and electric vehicles. They work by moving lithium ions between a cathode and an anode through an electrolyte during charging and discharging. Research into solid-state batteries aims to replace the liquid electrolyte with a solid for greater safety and energy density.
+
+Nanotechnology involves the manipulation of matter at the scale of 1 to 100 nanometers (a nanometer is one billionth of a meter). At this scale, materials often exhibit unique physical, chemical, and optical properties different from their bulk form.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6: EARTH SCIENCE & ENVIRONMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Earth is approximately 4.5 billion years old. It is the third planet from the Sun and the only known planet to harbor life. Earth's interior consists of four main layers: the inner core (solid iron-nickel), outer core (liquid iron-nickel), mantle (silicate rock), and crust (thin outer shell).
+
+The theory of plate tectonics explains that Earth's lithosphere is divided into large plates that float on the semi-fluid asthenosphere. The movement of these plates causes earthquakes, volcanic activity, and the formation of mountain ranges and ocean trenches.
+
+Climate change refers to long-term shifts in global temperatures and weather patterns. While some climate change is natural, since the mid-20th century, human activities — particularly burning fossil fuels — have been the dominant driver. This releases CO2 and other greenhouse gases, trapping heat in the atmosphere.
+
+The ozone layer, located in the stratosphere about 15–35 kilometers above Earth, absorbs the majority of the Sun's ultraviolet (UV) radiation. Chlorofluorocarbons (CFCs) and other chemicals were found to deplete the ozone layer, leading to the Montreal Protocol in 1987, an international treaty to phase out these substances.
+
+Renewable energy sources include solar, wind, hydroelectric, geothermal, and biomass. Solar panels convert sunlight into electricity using the photovoltaic effect. Wind turbines convert kinetic energy from wind into electrical energy. In 2023, renewable energy accounted for about 30% of global electricity generation.
+
+The water cycle (also called the hydrological cycle) describes the continuous movement of water through Earth's systems: evaporation from oceans and lakes, condensation into clouds, precipitation as rain or snow, and collection in rivers, lakes, and groundwater, then back to evaporation.
+
+=======================================================
+END OF KNOWLEDGE BASE
+=======================================================
